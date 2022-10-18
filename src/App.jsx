@@ -1,13 +1,16 @@
 import { useCallback } from "react";
 import { useEffect, useRef, useState } from "react";
 import styles from "./app.module.scss";
+import { nanoid } from 'nanoid'
 
 function App({ imageUrl }) {
   const [hotspots, setHotspots] = useState([]);
   const [hovered, setHovered] = useState();
   const ghostRef = useRef();
   const canvasRef = useRef();
-
+  useEffect(() => {
+    console.log(hotspots);
+  },[hotspots])
   useEffect(() => {
     const canvas = canvasRef.current;
     if (canvas) {
@@ -83,7 +86,7 @@ function App({ imageUrl }) {
         }
       };
       const endBox = () => {
-        setHotspots((h) => [...h, boxDims]);
+        setHotspots((h) => [...h, {id: nanoid(), ...boxDims}]);
         ghostRef.current.style.display = `none`;
         ghostStart = null;
       };
@@ -148,7 +151,7 @@ function App({ imageUrl }) {
               hotspots.map((hs, idx) => (
                 <ListItem
                   idx={idx}
-                  key={Math.random()}
+                  key={hs.id}
                   hotspot={hs}
                   setHovered={setHovered}
                   setHotspots={setHotspots}
@@ -201,7 +204,7 @@ function ListItem({ hotspot, setHotspots, setHovered, idx }) {
     setHotspots((hs) => {
       hs = [...hs];
       if (!hs[idx].subs) hs[idx].subs = [];
-      hs[idx].subs.push({type: 'child'});
+      hs[idx].subs.push({id: nanoid(), type: 'child'});
       return hs;
     });
   }
@@ -209,7 +212,7 @@ function ListItem({ hotspot, setHotspots, setHovered, idx }) {
     setHotspots((hs) => {
       hs = [...hs];
       if (!hs[idx].subs) hs[idx].subs = [];
-      hs[idx].subs.push({type: 'product'});
+      hs[idx].subs.push({id: nanoid(), type: 'product'});
       return hs;
     });
   }
@@ -225,7 +228,6 @@ function ListItem({ hotspot, setHotspots, setHovered, idx }) {
       });
     }
   }, [hotspot, setTitle]);
-
   return (
     <li
       className={styles.hotspotListItem}
@@ -240,7 +242,6 @@ function ListItem({ hotspot, setHotspots, setHovered, idx }) {
             width="16"
             height="16"
             fill="currentColor"
-            class="bi bi-chevron-down"
             viewBox="0 0 16 16"
             onClick={toggleCollapse}
           >
@@ -260,7 +261,6 @@ function ListItem({ hotspot, setHotspots, setHovered, idx }) {
               width="16"
               height="16"
               fill="currentColor"
-              class="bi bi-trash-fill"
               viewBox="0 0 16 16"
             >
               <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
@@ -275,7 +275,7 @@ function ListItem({ hotspot, setHotspots, setHovered, idx }) {
               sub={sub}
               idx={sIdx}
               topIdx={idx}
-              key={Math.random()}
+              key={sub.id}
               setHotspots={setHotspots}
             />
             if (sub.type === "product")
@@ -286,7 +286,7 @@ function ListItem({ hotspot, setHotspots, setHovered, idx }) {
                   topIdx={idx}
                   pIdx={null}
                   setHotspots={setHotspots}
-                  key={Math.random()}
+                  key={sub.id}
                 />
               ); 
           })}
@@ -346,7 +346,6 @@ function Product({sub, idx, pIdx, topIdx, setHotspots}){
           width="16"
           height="16"
           fill="currentColor"
-          class="bi bi-trash-fill"
           viewBox="0 0 16 16"
         >
           <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
@@ -375,7 +374,7 @@ function LevelTwoItem({ sub, idx, topIdx, setHotspots }) {
       hs = [...hs];
       let l2 = hs[topIdx].subs[idx];
       if (!l2.subs) l2.subs = [];
-      l2.subs.push({type: 'child'});
+      l2.subs.push({id: nanoid(), type: 'child'});
       return hs;
     });
   }
@@ -383,7 +382,7 @@ function LevelTwoItem({ sub, idx, topIdx, setHotspots }) {
     setHotspots((hs) => {
       hs = [...hs];
       if (!hs[topIdx].subs[idx].subs) hs[topIdx].subs[idx].subs = [];
-      hs[topIdx].subs[idx].subs.push({type: 'product'});
+      hs[topIdx].subs[idx].subs.push({id: nanoid(), type: 'product'});
       return hs;
     });
   }
@@ -418,7 +417,6 @@ function LevelTwoItem({ sub, idx, topIdx, setHotspots }) {
           width="16"
           height="16"
           fill="currentColor"
-          class="bi bi-chevron-down"
           viewBox="0 0 16 16"
           onClick={toggleCollapse}
         >
@@ -438,7 +436,6 @@ function LevelTwoItem({ sub, idx, topIdx, setHotspots }) {
             width="16"
             height="16"
             fill="currentColor"
-            class="bi bi-trash-fill"
             viewBox="0 0 16 16"
           >
             <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
@@ -454,7 +451,7 @@ function LevelTwoItem({ sub, idx, topIdx, setHotspots }) {
               idx={sIdx}
               pIdx={idx}
               topIdx={topIdx}
-              key={Math.random()}
+                  key={sub.id}
               setHotspots={setHotspots}
             />
            else if(sub.type === 'product') return <Product
@@ -462,7 +459,7 @@ function LevelTwoItem({ sub, idx, topIdx, setHotspots }) {
               idx={sIdx}
               pIdx={idx}
               topIdx={topIdx}
-              key={Math.random()}
+                  key={sub.id}
               setHotspots={setHotspots}
             />
           })}
@@ -509,7 +506,7 @@ function LevelThreeItem({ sub, idx, pIdx, topIdx, setHotspots }) {
       const nhs = [...hs];
       const item = nhs[topIdx].subs[pIdx].subs[idx];
       if (!item.subs) item.subs = [];
-      item.subs.push({ type: "heading", title: "Heading" });
+      item.subs.push({id: nanoid(), type: "heading", title: "Heading" });
       return nhs;
     });
   };
@@ -518,7 +515,7 @@ function LevelThreeItem({ sub, idx, pIdx, topIdx, setHotspots }) {
       const nhs = [...hs];
       const item = nhs[topIdx].subs[pIdx].subs[idx];
       if (!item.subs) item.subs = [];
-      item.subs.push({ type: "product", title: "product" });
+      item.subs.push({id: nanoid(), type: "product", title: "product" });
       return nhs;
     });
   };
@@ -548,7 +545,6 @@ function LevelThreeItem({ sub, idx, pIdx, topIdx, setHotspots }) {
           width="16"
           height="16"
           fill="currentColor"
-          class="bi bi-chevron-down"
           viewBox="0 0 16 16"
           onClick={toggleCollapse}
         >
@@ -568,7 +564,6 @@ function LevelThreeItem({ sub, idx, pIdx, topIdx, setHotspots }) {
             width="16"
             height="16"
             fill="currentColor"
-            class="bi bi-trash-fill"
             viewBox="0 0 16 16"
           >
             <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
@@ -582,7 +577,7 @@ function LevelThreeItem({ sub, idx, pIdx, topIdx, setHotspots }) {
               <li
                 className={styles.levelFourItem}
                 data-type={s.type}
-                key={Math.random()}
+                  key={s.id}
               >
                 <input type="text" defaultValue={s.title} />
                 <div className={styles.delete} onClick={() => removeChild(i)}>
@@ -591,7 +586,6 @@ function LevelThreeItem({ sub, idx, pIdx, topIdx, setHotspots }) {
                     width="16"
                     height="16"
                     fill="currentColor"
-                    class="bi bi-trash-fill"
                     viewBox="0 0 16 16"
                   >
                     <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />

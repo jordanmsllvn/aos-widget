@@ -1,0 +1,203 @@
+.component{
+    width: 100%;
+    &, * {
+        box-sizing: border-box;
+    }
+}
+.main{
+    padding: 20px;
+    display: flex;
+    align-items: flex-start;
+}
+.imgDisplay{
+    width: 60%;
+    position: relative;
+}
+.image{
+    width: 100%;
+    height: auto;
+    pointer-events: none;
+    user-select: none;
+    position: relative;
+    z-index: 1;
+}
+.canvas{
+    position: absolute;
+    top:0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index:2;
+}
+.ghost{
+    background-color: transparentize(green, 0.5);
+    position: absolute;
+    pointer-events: none;
+    border-radius: 2px;
+    border: 1px solid white;
+    backdrop-filter: contrast(250%) brightness(110%);
+}
+.hotspot{
+    display: block;
+    position: absolute;
+    background-color: transparentize(#28B4FF, 0.2);
+    border-radius: 3px;
+    border: 1px solid black;
+    &.isHovered{
+        border: 3px solid orange;
+        background-color: transparentize(orange, 0.2);
+    }
+}
+.aside{
+    padding-left: 30px;
+    width: 40%;
+}
+
+
+.hotspotList{
+   margin: 0;
+   padding: 0;
+   list-style-type: none; 
+   width: 100%;
+}
+.hotspotListItem{
+    background-color: #28B4FF;
+    padding: 10px 10px;
+    margin-bottom: 2px;
+    border-radius: 4px;
+    ul {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+        padding: 10px;
+    }
+    input{
+        width: 100%;
+        padding: 5px 10px;
+        border-radius: 3px;
+        border: 0;
+        background-color: transparentize(white, 0.75);
+        color: white;
+        font-weight: bold;
+        appearance: none;
+        outline: none;
+        &:focus{
+            outline: 1px solid white;
+        }
+    }
+}
+.hotspotListItemHeading{
+    width: 100%;
+    color: white;
+}
+
+.title{
+    display: flex;
+    position: relative;
+    align-items: center;
+    > svg{margin-right: 10px; cursor: pointer;}
+    *[data-collapsed="true"] & > svg{
+        transform: rotateZ(-90deg);
+    }
+}
+.levelTwoItem{
+    background-color: #AEAEAE;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 4px;
+    input{
+        color: black;
+        font-weight: normal;
+    }
+}
+
+.levelThreeItem{
+    margin-bottom: 10px;
+    color: black;
+    padding: 10px;
+    background-color: white;
+    border-radius: 4px;
+    input{
+        color: black;
+        border: 1px solid #AEAEAE;
+        font-weight: normal;
+    }
+    ul{
+        margin-top: 0;
+    }
+}
+.levelFourItem{
+    position: relative;
+    margin-bottom: 3px;
+    color: black;
+    input{
+        color: black;
+        border: 1px solid #AEAEAE;
+        font-weight: bold;
+    }
+    &[data-type="product"]{
+        margin-left: 10px;
+        input{
+            font-weight: normal;
+        }
+    }
+}
+.delete{
+    position: absolute;
+    right: 5px;
+    top:4px;
+    color: #777;
+    cursor: pointer;
+    &:hover{
+        color: red;
+    }
+}
+
+
+.actions{
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+    margin-bottom: 0px;
+    margin-top: 5px;
+}
+.action{
+    display: block;
+    border: 1px solid #ddd;
+    margin-left: 10px;
+    font-size: 11px;
+    text-transform: uppercase;
+    padding: 5px 15px 6px 15px;
+    cursor: pointer;
+    border-radius: 4px;
+    background-color: white;
+    &:hover {
+        background-color: #28B4FF;
+        color: white;
+    }
+}
+.hotspotListItem,
+.levelTwoItem,
+.levelThreeItem {
+    &[data-collapsed="true"] {
+        ul {
+            display: none;
+        }
+    }
+}
+
+.none {
+    text-transform: uppercase;
+    text-align: center;
+    border: 1px solid #AEAEAE;
+    background-color: #EEE;
+    color: #444;
+    padding: 30px;
+    border-radius: 4px;
+}
+
+.productItem{
+    margin-left: 30px;
+    margin-bottom: 2px;
+    position: relative;
+}
